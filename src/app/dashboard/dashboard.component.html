@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+  <title>Dashboard</title>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <style>
+          input[type=text] {
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            background-color: white;
+            background-image: url(app/images/searchicon.png);
+            background-position: 5px 4px;
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+              }
+            #TweetContent {
+              padding: 4px;
+              font-size: 13px;
+            }
+            button {
+              font-size: 13px;
+            }
+            #menu{
+              font-size: 12px;
+            }
+            input[type="file"] {
+                display: none;
+            }
+            .custom-file-upload {
+                border: 1px solid #ccc;
+                display: inline-block;
+                padding: 6px 12px;
+                cursor: pointer;
+            }
+               /* The Modal (background) */
+            .modal {
+              text-align: center !important;
+              align-content: center !important;
+              display: none; /* Hidden by default */
+              position: fixed; /* Stay in place */
+              z-index: 1; /* Sit on top */
+              padding-top: 100px; /* Location of the box */
+              left: 0;
+              top: 0;
+              width: 100%; /* Full width */
+              height: 100%; /* Full height */
+              overflow: auto; /* Enable scroll if needed */
+              background-color: rgb(0,0,0); /* Fallback color */
+              background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+            
+            /* Modal Content */
+            .modal-content {
+              text-align: center !important;
+              align-content: center !important;
+              background-color: #fefefe;
+              margin: auto;
+              padding: 20px;
+              border: 1px solid #888;
+              width: 30%;
+            }
+            
+            /* The Close Button */
+            .close {
+              color: #aaaaaa;
+              float: right;
+              font-size: 28px;
+              font-weight: bold;
+            }
+            
+            .close:hover,
+            .close:focus {
+              color: #000;
+              text-decoration: none;
+              cursor: pointer;
+            }
+              /* CUSTOM RADIO & CHECKBOXES
+              http://stackoverflow.com/a/17541916/383904 */
+            .rad,
+            .ckb{
+              cursor: pointer;
+              user-select: none;
+              -webkit-user-select: none;
+              -webkit-touch-callout: none;
+            }
+            .rad > input,
+            .ckb > input{ /* HIDE ORG RADIO & CHECKBOX */
+              position: absolute;
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+            /* RADIO & CHECKBOX STYLES */
+            /* DEFAULT <i> STYLE */
+            .rad > i,
+            .ckb > i{ 
+              display: inline-block;
+              vertical-align: middle;
+              width:  16px;
+              height: 16px;
+              border-radius: 50%;
+              transition: 0.2s;
+              box-shadow: inset 0 0 0 8px #fff;
+              border: 1px solid gray;
+              background: gray;
+            }
+            /* CHECKBOX OVERWRITE STYLES */
+            .ckb > i {
+              width: 25px;
+              border-radius: 3px;
+            }
+            .rad:hover > i{ /* HOVER <i> STYLE */
+              box-shadow: inset 0 0 0 3px #fff;
+              background: gray;
+            }
+            .rad > input:checked + i{ /* (RADIO CHECKED) <i> STYLE */
+              box-shadow: inset 0 0 0 3px #fff;
+              background: orange;
+            }
+            /* CHECKBOX */
+            .ckb > input + i:after{
+              content: "";
+              display: block;
+              height: 12px;
+              width:  12px;
+              margin: 2px;
+              border-radius: inherit;
+              transition: inherit;
+              background: gray;
+            }
+            .ckb > input:checked + i:after{ /* (RADIO CHECKED) <i> STYLE */
+              margin-left: 11px;
+              background:  orange;
+            }
+        </style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>SentiStocks</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  <li><a id="menu" href="http://localhost:4200/dashboard/"><i class="fa fa-home"></i> Sentiment Analysis <span class="fa fa-chevron-right"></span></a></li>
+                  <li><a id="menu" href="http://localhost:4200/charts/"><i class="fa fa-edit"></i> Charts & Visualisation <span class="fa fa-chevron-right"></span></a></li>
+                  <li><a id="menu" href="http://localhost:4200/stocks/"><i class="fa fa-cogs"></i> Stock Market Prediction<span class="fa fa-chevron-right"></span></a></li>
+                </ul>
+              </div>
+              
+
+            </div>
+            <!-- /sidebar menu -->
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+     
+        <!-- page content -->
+        <div class="right_col" role="main">
+          
+          <div class="row">
+            <div class="col-md-12 col-sm-12 ">
+              <div class="dashboard_graph">
+
+                <div class="row x_title">
+                  <div class="col-md-6">
+                    <h3>Sentiment Analysis</h3>
+                  </div>
+                  <div class="col-md-6">
+                    
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 ">
+                  <div id="chart_plot" class="form-group">
+                    <div class="item">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align " id="TweetContent">Write a Sentence <span class="required">*</span>
+                      </label>
+                      <div class="col-md-4 col-sm-4">
+                        <input class="form-control" type="text"  class="form-control w3-input w3-border w3-round-large" placeholder="Tweet" [(ngModel)]="Tweet.content">
+                      </div>
+                      <div>
+                        <span>&nbsp; &nbsp;</span>
+                        <button type="submit" class="btn btn-success" (click)="getSentiment()">Submit</button>
+                      </div>
+                      
+                      
+                      <div class="item form-group">
+                        <div class="col-md-3 col-sm-3">
+                          
+                          <img *ngIf="Tweet.sentiment == 'positive'" style="width: 68%;" src="app/images/positive1.png">
+                          <img *ngIf="Tweet.sentiment == 'negative'" style="width: 68%;" src="app/images/negative1.png">
+                          <img *ngIf="Tweet.sentiment == 'neutral'" style="width: 68%;" src="app/images/neutral1.png">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- <div class="col-md-8 col-sm-8 ">
+                  
+                </div>
+                 <div class="col-md-4 col-sm-4 ">
+                   <span *ngIf="Tweet.sentiment == 'positive'" style="color:green;">Positive Sentiment</span>
+                   <span *ngIf="Tweet.sentiment == 'negative'" style="color:red;">Negative Sentiment</span>
+                   <span *ngIf="Tweet.sentiment == 'neutral'" style="color:black;">Negative Sentiment</span>
+                  </div> -->
+                  <br/>
+                  <br/> 
+                  <div class="row x_title">
+                    <div class="col-md-6">
+                      <h3>Sentiment Analysis for a Tweets Collection</h3>
+                    </div>
+                    <div class="col-md-6">
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-sm-12">
+                    <div id="chart_plot" class="form-group">
+                      <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align"  id="TweetContent" >Insert your Tweets (CSV) <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 ">
+                          <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i>Upload File
+                        </label>
+                          <input type="file" id="file-upload" name="file" class="w3-input w3-border w3-round-large" (change)="onFileSelected($event)"> &nbsp; &nbsp;<span>{{filename}}</span>
+                        </div>
+                        
+                        <div class="item form-group">
+                          <div class="col-md-6 col-sm-6">
+                            <button type="submit" class="btn btn-success" (click)="getTweetsSentiment()">Submit</button>
+                            &nbsp;
+                            <button type="submit" class="btn btn-primary" (click)="correctSentiment()">Save Tweets</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="col-md-12 col-sm-12"></div>
+                 
+                    <!-- <div *ngFor="let res of response" >
+                      <div class="col-md-12 col-sm-12" *ngIf="res.cleaned_tweets != null">
+                      <span>{{res.cleaned_tweets}}</span>
+                      <span *ngIf="res.sentiment == '1'" style="color:green; float: right;">Positive Sentiment</span>
+                      <span *ngIf="res.sentiment == '-1'" style="color:red; float: right;">Negative Sentiment</span>
+                      <span *ngIf="res.sentiment == '0'" style="color:black; float: right;">Neutral Sentiment</span>
+                      <hr>
+                    </div>
+                  </div> -->
+
+                  
+                  <div class="x_content">
+                    <div class="dashboard-widget-content" style="height:700px; overflow:auto;">
+                      <form [formGroup]="myForm">
+
+                     
+                     <table class="table">
+                       <thead>
+                         <tr>
+                           <th>Tweet</th>
+                           <th>Predicted Sentiment</th>
+                           <th>Final Decision</th>
+                         </tr>
+                       </thead>
+                       <tbody *ngFor="let res of response">
+                         <tr *ngIf="res.sentiment == '1'">
+                          <td>{{res.cleaned_tweets}}</td>
+                          <td><img style="width: 20%;" src="app/images/positive1.png"></td>
+                          <td>
+                            <label class="ckb">
+                            <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'-1',$event.target.checked)">
+                            <i></i> &nbsp; <span>Negative</span>
+                            </label>
+                            <label class="ckb">
+                            <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'0',$event.target.checked)">
+                            <i></i> &nbsp; <span>Neutral</span>
+                          </label>
+                        </td>
+                         </tr>
+                         <tr *ngIf="res.sentiment == '-1'">
+                          <td>{{res.cleaned_tweets}}</td>
+                          <td><img style="width: 20%;" src="app/images/negative1.png"></td>
+                          <td>
+                            <label class="ckb">
+                              <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'1',$event.target.checked)">
+                              <i></i> &nbsp; <span>Positive</span>
+                              </label>
+                              <label class="ckb">
+                              <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'0',$event.target.checked)">
+                              <i></i> &nbsp; <span>Neutral</span>
+                            </label>
+                          </td>
+                         </tr>
+                         <tr *ngIf="res.sentiment == '0'">
+                          <td>{{res.cleaned_tweets}}</td>
+                          <td><img style="width: 20%;" src="app/images/neutral1.png"></td>
+                          <td><label class="ckb">
+                            <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'1',$event.target.checked)">
+                            <i></i> &nbsp; <span>Positive</span>
+                            </label>
+                            <label class="ckb">
+                            <input type="checkbox" name="ckb1" class="radio" (change)="onChange(res.cleaned_tweets,'-1',$event.target.checked)">
+                            <i></i> &nbsp; <span>Negative</span>
+                          </label>
+                        </td>
+                         </tr>
+                       </tbody>
+                     </table>
+                      </form>
+                    </div>
+                  </div>
+  
+                <div class="clearfix"></div>
+                
+              </div>
+            </div>
+
+          </div>
+          <br/>
+        
+          <br/>
+             <!-- Modal -->
+             <div id="myModal" class="modal">
+              <div class="modal-content" style="text-align: center !important;">
+                <div class="modal-body">
+                  <img src="app/images/searching_tickets.gif" width="450px" class="center">
+                </div>
+                
+              </div>
+            
+             </div>
+
+             <div class="modal" id="exampleModal" role="dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Stock Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body" *ngFor="let stock of stockprices">
+                    That Stock is going to <span *ngIf="StockStatus == 'rise' && stock.Date !== '2020-06-03'" style="color: green;"> <b>RISE</b> </span>
+                    <span *ngIf="stock.Date == '2020-06-03'" style="color: red;"><b>DOWN</b></span>
+                    <span *ngIf="StockStatus == 'down'" style="color: red;"> <b>DOWN</b> </span>
+                    <span *ngIf="StockStatus == 'same'" style="color: black;"> <b>STABLE</b> </span>
+                     Tomorrow
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
+                  </div>
+                </div>
+              
+            </div>
+          <div class="row">
+            <!-- <div class="col-md-8 col-sm-8">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Tweets <small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <input type="text" name="keyword" class="form-control" [(ngModel)]="keyword">
+                    <br><br>
+                    <button type="button" id="myBtn" class="btn btn-success" (click)="getTweets()"> Get Today Tweets</button>
+                    <button type="submit" class="btn btn-success" (click)="download()">Export CSV</button>
+                    <button type="submit" class="btn btn-success" (click)="GetStockPrices()">Get Today Stock prices</button>
+                    <button type="submit" id = "btnCorrelation" class="btn btn-primary" (click)="Correlation()">Correlate Sentiments & Stocks</button>
+                  
+                  </ul>
+                  <div class="clearfix">
+
+                    
+
+                  </div>
+                </div>
+                <div class="x_content">
+                  <div class="dashboard-widget-content" style="height:400px; overflow:auto;">
+
+                    <ul class="list-unstyled timeline widget">
+                      <li *ngFor="let twt of listTweets">
+                        <div class="block">
+                          <div class="block_content">
+                            <h2 class="title">
+                                              <a>{{twt.cleaned_tweets}}</a>
+                                          </h2>
+                            <div class="byline">
+                              <span>{{twt.Date}}</span> by <a>{{twt.username}}</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+              
+                    </ul>
+                  </div>
+                  
+                    <span>Stock Status for today</span>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Open</th>
+                          <th>Close</th>
+                          <th>High</th>
+                          <th>Low</th>
+                          <th>Ajd Close</th>
+                          <th>Volume</th>
+                        </tr>
+                        
+                      </thead>
+                      <tbody *ngFor="let stock of stockprices">
+                        <tr>
+                          <td>{{stock.Date}}</td>
+                          <td>{{stock.Open}}</td> 
+                          <td>{{stock.Close}}</td>
+                          <td>{{stock.High}}</td>
+                          <td>{{stock.Low}}</td>
+                          <td>{{stock['Adj Close']}}</td>
+                          <td>{{stock.Volume}}</td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                  
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="col-md-4 col-sm-4">
+              <canvas baseChart
+                [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+            </canvas>
+
+            </div> -->
+
+    
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+  </body>
+</html>
